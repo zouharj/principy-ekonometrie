@@ -1,0 +1,4 @@
+# data a PDF bez převodu konců řádků
+*.csv -text
+*.pdf binary
+*.html -text

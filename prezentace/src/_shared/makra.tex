@@ -1,0 +1,140 @@
+% =====================================================================
+%  Makra pro značení (převzato z 4EK216 makra.tex, převedeno do UTF-8, bez mtpro2)
+%  \mbf → \mathbf, \what → \widehat, \wtilde → \widetilde, \upbeta → \beta
+%  Tučná řečtina je stojatá přes \symbfup (unicode-math, xelatex); balíček bm se nepoužívá.
+% =====================================================================
+
+% Tučná písmena (vektory, matice)
+\renewcommand{\aa}{\ensuremath{\mathbf{a}}}%
+\newcommand{\bb}{\ensuremath{\mathbf{b}}}%
+\newcommand{\cc}{\ensuremath{\mathbf{c}}}%
+\newcommand{\dd}{\ensuremath{\mathbf{d}}}%
+\newcommand{\ee}{\ensuremath{\mathbf{e}}}%
+\newcommand{\ii}{\ensuremath{\mathbf{i}}}%
+\newcommand{\pp}{\ensuremath{\mathbf{p}}}%
+\newcommand{\qq}{\ensuremath{\mathbf{q}}}%
+\newcommand{\rr}{\ensuremath{\mathbf{r}}}%
+\renewcommand{\ss}{\ensuremath{\mathbf{s}}}%
+\newcommand{\uu}{\ensuremath{\mathbf{u}}}%
+\newcommand{\vv}{\ensuremath{\mathbf{v}}}%
+\newcommand{\ww}{\ensuremath{\mathbf{w}}}%
+\newcommand{\xx}{\ensuremath{\mathbf{x}}}%
+\newcommand{\yy}{\ensuremath{\mathbf{y}}}%
+\newcommand{\zz}{\ensuremath{\mathbf{z}}}%
+\renewcommand{\AA}{\ensuremath{\mathbf{A}}}%
+\newcommand{\BB}{\ensuremath{\mathbf{B}}}%
+\newcommand{\CC}{\ensuremath{\mathbf{C}}}%
+\newcommand{\DD}{\ensuremath{\mathbf{D}}}%
+\newcommand{\EE}{\ensuremath{\mathbf{E}}}%
+\newcommand{\II}{\ensuremath{\mathbf{I}}}%
+\newcommand{\LL}{\ensuremath{\mathbf{L}}}%
+\newcommand{\MM}{\ensuremath{\mathbf{M}}}%
+\newcommand{\NN}{\ensuremath{\mathbf{N}}}%
+\newcommand{\PP}{\ensuremath{\mathbf{P}}}%
+\newcommand{\QQ}{\ensuremath{\mathbf{Q}}}%
+\newcommand{\RR}{\ensuremath{\mathbf{R}}}%
+\renewcommand{\SS}{\ensuremath{\mathbf{S}}}%
+\newcommand{\TT}{\ensuremath{\mathbf{T}}}%
+\newcommand{\UU}{\ensuremath{\mathbf{U}}}%
+\newcommand{\VV}{\ensuremath{\mathbf{V}}}%
+\newcommand{\XX}{\ensuremath{\mathbf{X}}}%
+\newcommand{\YY}{\ensuremath{\mathbf{Y}}}%
+\newcommand{\ZZ}{\ensuremath{\mathbf{Z}}}%
+\newcommand{\nul}{\ensuremath{\mathbf{0}}}%  nulový vektor
+\newcommand{\jedn}{\ensuremath{\mathbf{1}}}% vektor jedniček
+
+% Řecká písmena a odhady
+\newcommand{\eps}{\varepsilon}%
+\newcommand{\aalpha}{\symbfup{\alpha}}%
+\newcommand{\bbeta}{\symbfup{\beta}}%
+\newcommand{\ddelta}{\symbfup{\delta}}%
+\newcommand{\ggamma}{\symbfup{\gamma}}%
+\newcommand{\ssigma}{\symbfup{\sigma}}%
+\newcommand{\ttheta}{\symbfup{\theta}}%
+\newcommand{\mmu}{\symbfup{\mu}}%
+\newcommand{\ppi}{\symbfup{\pi}}%
+\newcommand{\SSigma}{\symbfup{\Sigma}}%
+\newcommand{\OOmega}{\symbfup{\Omega}}%
+\newcommand{\eeps}{\symbfup{\varepsilon}}%
+\newcommand{\betah}{\widehat{\beta}}%
+\newcommand{\betat}{\widetilde{\beta}}%
+\newcommand{\bbetah}{\widehat{\bbeta}}%
+\newcommand{\bbetat}{\widetilde{\bbeta}}%
+\newcommand{\ggammah}{\widehat{\ggamma}}%
+\newcommand{\tthetah}{\widehat{\ttheta}}%
+\newcommand{\tthetat}{\widetilde{\ttheta}}%
+\newcommand{\SSigmah}{\widehat{\SSigma}}%
+\newcommand{\OOmegah}{\widehat{\OOmega}}%
+\newcommand{\Vhat}{\widehat{\mathbf{V}}}%
+\newcommand{\uhat}{\widehat{u}}%
+\newcommand{\uuhat}{\widehat{\mathbf{u}}}%
+\newcommand{\yhat}{\widehat{y}}%
+\newcommand{\yyhat}{\widehat{\mathbf{y}}}%
+
+% Transpozice: stojaté bezpatkové T v horním indexu
+\newcommand{\trans}{^{\mkern-1.5mu\mathsf{T}}}%
+\newcommand{\tran}{^{\mkern-1.5mu\mathsf{T}\mkern-1.5mu}}%
+\newcommand{\T}{^{\mkern-1.5mu\mathsf{T}\mkern-1.5mu}}%
+\newcommand{\tra}{^{\mkern-1.5mu\mathsf{T}\mkern-1.5mu}}%
+\newcommand{\inv}{^{-1}}%
+\newcommand{\XTX}{\XX\trans\XX}%
+\newcommand{\xb}{\xx\bbeta}%
+
+% Operátory
+% := piš jako \coloneq (centercolon z mathtools nefunguje s unicode-math)
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}%
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}%
+\DeclarePairedDelimiterX{\norm}[1]{\lVert}{\rVert}{#1}%
+\let\Pr\relax
+\DeclareMathOperator{\Pr}{Pr}%
+\DeclareMathOperator{\prob}{Pr}%
+\DeclareMathOperator{\ev}{E}%
+\DeclareMathOperator{\var}{var}%
+\DeclareMathOperator{\Avar}{Avar}%
+\DeclareMathOperator{\sd}{sd}%
+\DeclareMathOperator{\corr}{corr}%
+\DeclareMathOperator{\cov}{cov}%
+\DeclareMathOperator{\se}{se}% se(β̂ⱼ) stojatě: funkce odhadu
+% samostatné se (hotová veličina, „se klasické“, „robustní se“) kurzívou jako t, p, F;
+% platí se = se(β̂ⱼ) (konvence od 10. 11. 2026)
+\newcommand{\sei}{\ensuremath{\mathit{se}}}%
+\DeclareMathOperator{\diag}{diag}%
+\DeclareMathOperator{\ind}{\perp\!\!\!\perp}%
+\DeclareMathOperator{\logit}{logit}%
+\DeclareMathOperator*{\argmax}{arg\,max}%
+\DeclareMathOperator*{\argmin}{arg\,min}%
+\DeclareMathOperator{\rank}{rank}%
+\DeclareMathOperator{\tr}{tr}%
+\DeclareMathOperator{\Span}{span}%
+\DeclareMathOperator*{\plim}{plim}%
+\newcommand{\Norm}{\mathcal{N}}% normální rozdělení (kaligrafické N), např. \Norm(0, 1)
+\newcommand{\SST}{\mathrm{SST}}%
+\newcommand{\SSE}{\mathrm{SSE}}%
+\newcommand{\SSR}{\mathrm{SSR}}%
+\newcommand{\abs}[1]{\ensuremath{|#1|}}%
+
+% Šipky a konvergence
+\newcommand{\sfi}{\ensuremath{\Rightarrow}}%
+\newcommand{\sif}{\ensuremath{\Leftarrow}}%
+\newcommand{\siff}{\ensuremath{\Leftrightarrow}}%
+\newcommand{\lfi}{\ensuremath{\Longrightarrow}}%
+\newcommand{\lif}{\ensuremath{\Longleftarrow}}%
+\newcommand{\liff}{\ensuremath{\Longleftrightarrow}}%
+\newcommand{\asim}{\ensuremath{\stackrel{\text{a}}{\sim}}}%
+\newcommand{\pto}{\ensuremath{\stackrel{\text{p}}{\rightarrow}}}%
+\newcommand{\dto}{\ensuremath{\stackrel{\text{d}}{\rightarrow}}}%
+
+% Různé
+\newcommand{\Rn}[1]{\ensuremath{\mathbb{R}^{#1}}}% reálné n-tice (koeficienty, čísla)
+\newcommand{\En}[1]{\ensuremath{\mathbb{E}^{#1}}}% euklidovský prostor (geometrie: délka, kolmost, úhel)
+\newcommand{\dif}{\,\mathrm{d}}%
+\newcommand{\HO}{\ensuremath{\mathsf{H}_0}}%
+\newcommand{\HI}{\ensuremath{\mathsf{H}_1}}%
+\providecommand{\bm}[1]{\symbfup{#1}}% pro převzaté zdroje (\bm{\beta} → stojaté)
+\newcommand{\aj}[1]{\textit{#1}}% anglický termín
+\newcommand{\eng}[1]{(\textit{#1})}% anglický termín v závorce za českým
+\newcommand{\pojem}[1]{\textbf{\textcolor{fisZelenaTmava}{#1}}}% nově zaváděný pojem
+\newcommand{\kod}[1]{\texttt{#1}}%
+
+% Odkaz na interaktivní materiál v Moodlu (jen slovně, bez URL)
+\newcommand{\interaktivni}[1]{\textcolor{fisZelena}{\small$\blacktriangleright$}~Interaktivní materiál \textit{#1}}%

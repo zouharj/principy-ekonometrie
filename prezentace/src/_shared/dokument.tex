@@ -1,0 +1,140 @@
+% =====================================================================
+%  Společná preambule textových dokumentů 4EK453 (A4): příklady ke cvičení
+%  (cviceni/) a otázky ke zkoušce (zkouska/). Vkládá se za \documentclass:
+%    \documentclass[11pt,a4paper]{article}
+%    \input{../prezentace/src/_shared/dokument.tex}
+%  Překlad: xelatex (2×). Značení a makra jsou stejná jako v prezentacích
+%  (makra.tex), barvy stejné jako v beamerthemeFIS.sty.
+% =====================================================================
+
+% Pořadí: babel a mathtools před unicode-math (jinak kolize aktivního znaku „-“
+% a mathtools přepíše \underbrace verzí pro staré fonty)
+\usepackage[czech]{babel}
+\usepackage{amsmath}
+\usepackage{mathtools}
+% Písma: Latin Modern, volaná jménem souboru (jako v _quarto.yml)
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{lmroman10}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\setsansfont{lmsans10}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-oblique, BoldItalicFont=*-boldoblique]
+\setmonofont{lmmono10}[Extension=.otf, UprightFont=*-regular, ItalicFont=*-italic]
+\setmathfont{latinmodern-math.otf}
+
+\AtBeginDocument{\shorthandoff{-"}}
+
+\usepackage[a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm, headsep=8mm]{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage[hidelinks]{hyperref}
+
+% Barvy FIS VŠE (stejné jako v beamerthemeFIS.sty)
+\definecolor{fisZelena}{HTML}{00957D}
+\definecolor{fisZelenaTmava}{HTML}{006E5C}
+\definecolor{fisZelenaSvetla}{HTML}{DFF1EC}
+\definecolor{fisSeda}{HTML}{54585A}
+\definecolor{fisSedaSvetla}{HTML}{7C8183}
+\definecolor{fisLinka}{HTML}{DCE0DF}
+\definecolor{fisPodklad}{HTML}{EBF0EE}
+\definecolor{fisCerna}{HTML}{1D1F20}
+\definecolor{fisModra}{HTML}{0072B0}
+\definecolor{fisCervena}{HTML}{D0453A}
+
+% cesta ke sdíleným souborům; dokument hlouběji ve stromu si ji nastaví před \input,
+% např. \newcommand{\sdilene}{../../prezentace/src/_shared/}
+\providecommand{\sdilene}{../prezentace/src/_shared/}
+% název kurzu v~titulku a záhlaví; dokument pro více kurzů (MP) si před \input
+% nastaví \def\kurz{} a řádek s~kurzem se nevysází
+\providecommand{\kurz}{4EK453 Principy ekonometrie}
+\input{\sdilene makra.tex}
+
+% ---------------------------------------------------------------------
+%  Sazba
+% ---------------------------------------------------------------------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt}
+\renewcommand{\arraystretch}{1.1}
+\frenchspacing
+\setlength{\emergencystretch}{2em}% dlouhé \texttt{…} a vzorce raději řídčeji než přes okraj
+
+\titleformat{\section}{\sffamily\Large\bfseries\color{fisZelenaTmava}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\sffamily\large\bfseries\color{fisSeda}}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{16pt plus 4pt}{6pt}
+\titlespacing*{\subsection}{0pt}{12pt plus 3pt}{4pt}
+\renewcommand{\paragraph}[1]{\par\medskip\noindent{\sffamily\bfseries\color{fisZelenaTmava}#1}\quad}
+
+% Titulek: \title, \subtitle, \author, \institution; datum = datum překladu (verze)
+\makeatletter
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+\newcommand{\institution}[1]{\gdef\@institution{#1}}
+\gdef\@subtitle{}\gdef\@institution{}
+\renewcommand{\maketitle}{%
+  \thispagestyle{plain}%
+  {\color{fisZelena}\rule{\linewidth}{2pt}}\par\vspace{4pt}%
+  \ifx\kurz\@empty\else{\sffamily\small\color{fisSeda}\kurz\par}\vspace{2pt}\fi
+  {\sffamily\LARGE\bfseries\color{fisCerna}\@title\par}\vspace{2pt}%
+  \ifx\@subtitle\@empty\else{\sffamily\large\color{fisSeda}\@subtitle\par}\fi
+  \vspace{6pt}%
+  {\small\@author\ \textbar\ \@institution\hfill verze z~\@date\par}%
+  \vspace{2pt}{\color{fisZelena}\rule{\linewidth}{0.6pt}}\par\vspace{8pt}}
+\makeatother
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{{\color{fisLinka}\hrule height\headrulewidth}}
+\makeatletter
+\fancyhead[L]{\sffamily\footnotesize\color{fisSeda}\kurz}
+\fancyhead[R]{\sffamily\footnotesize\color{fisSeda}\@title\ \textbar\ \@date}
+\makeatother
+\fancyfoot[C]{\sffamily\footnotesize\color{fisSeda}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\sffamily\footnotesize\color{fisSeda}\thepage}}
+
+% ---------------------------------------------------------------------
+%  Příklady
+% ---------------------------------------------------------------------
+% \begin{priklad} … \end{priklad}         úloha na papír
+% \begin{priklad}[R] … \end{priklad}      úloha na počítači (v R)
+% \koumaci                                označení „(Pro koumáky.)“
+% \begin{prikladlist} \item … \end{prikladlist}   podúlohy a), b), …
+% \begin{reseni} … \end{reseni}           řešení; tisk řídí \includecomment / \excludecomment
+\newcounter{priklad}[section]
+\renewcommand{\thepriklad}{\ifnum\value{section}>0 \thesection.\fi\arabic{priklad}}
+% značka R: malý obdélník bez \strut, spodkem barvy na účaří (nezvětšuje výšku řádku)
+\newcommand{\znackaR}{\,{\setlength{\fboxsep}{1.3pt}\raisebox{\fboxsep}{\colorbox{fisZelena}{\sffamily\scriptsize\bfseries\color{white}\,R\,}}}}
+% (Pro koumáky.) = vyžaduje aparát, který studenti nemusí mít (integrály, Choleského
+% rozklad, obtížnější důkazy); u podúloh je dáváme na konec příkladu
+\newcommand{\koumaci}{(\textit{Pro koumáky.})\ }% závorky stojatě
+\NewDocumentEnvironment{priklad}{o}{%
+  \par\addvspace{8pt}\refstepcounter{priklad}%
+  \noindent{\sffamily\bfseries\color{fisZelenaTmava}Příklad~\thepriklad}%
+  \IfValueT{#1}{\hspace{0.3em}\znackaR}\quad\ignorespaces}{\par\addvspace{4pt}}
+\newlist{prikladlist}{enumerate}{1}
+\setlist[prikladlist]{label=\textsl{\alph*})~, leftmargin=2em, itemsep=1pt, topsep=2pt}
+\newcommand{\rada}{\par\smallskip\textit{Rada:} }
+\newcommand{\pozn}{\par\smallskip\textit{Poznámka:} }
+
+% Číslovaný seznam otázek s předponou (T1, T2, … / P1, P2, …), číslování
+% pokračuje přes nadpisy: \begin{otazky}{T} … \end{otazky}
+\newlist{otazkyT}{enumerate}{1}
+\setlist[otazkyT]{label=\textbf{\sffamily\color{fisZelenaTmava}T\arabic*.}, ref=T\arabic*, resume,
+  leftmargin=3em, itemsep=3pt, topsep=3pt}
+\newlist{otazkyP}{enumerate}{1}
+\setlist[otazkyP]{label=\textbf{\sffamily\color{fisZelenaTmava}P\arabic*.}, ref=P\arabic*, resume,
+  leftmargin=3em, itemsep=6pt, topsep=3pt}
+
+% Výpisy z R (vstupují ze souborů vygenerovaných skriptem, nikdy ne opsané ručně)
+\fvset{fontsize=\small, xleftmargin=0.5em, frame=leftline, rulecolor=\color{fisLinka},
+  framerule=1.5pt, framesep=5pt}
+% výpis se nedělí mezi stránky
+\newcommand{\vystupR}[1]{\par\noindent\begin{minipage}{\linewidth}\VerbatimInput{#1}\end{minipage}\par}

@@ -1,0 +1,11 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.aux
+*.log
+*.out
+*.synctex.gz
+.DS_Store
+Thumbs.db
+desktop.ini
