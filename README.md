@@ -41,7 +41,7 @@ Skripty čtou data relativní cestou, např. `read.csv("data/wage2.csv")`. Otev�
 
 Na začátek vlastních skriptů doporučuji `options(scipen = 10)`, aby R nevypisovalo čísla ve vědeckém zápisu.
 
-Data z dotazníkového šetření o populismu (`populismus_cisty.csv`) tu nejsou, protože jejich licence nedovoluje volné šíření. Najdete je v Moodlu.
+Data z Českého panelového šetření domácností o populismu (`populismus_cisty.csv`) tu nejsou: podmínky Českého sociálněvědního datového archivu nedovolují jejich další šíření. Najdete je v Moodlu (jen pro účastníky kurzu).
 
 ## Chyby a dotazy
 
