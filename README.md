@@ -2,7 +2,7 @@
 
 Materiály k předmětu **4EK453 Principy ekonometrie** (Katedra ekonometrie FIS VŠE v Praze, ZS 2026/27, Jan Zouhar).
 
-Tady najdete vždy **aktuální verze** prezentací, R skriptů, dat a dalších dokumentů. Každé PDF má na titulní straně datum verze. Oznámení, odevzdávání a hodnocení zůstávají v Moodlu a InSISu.
+Tady najdete vždy **aktuální verze** prezentací, R skriptů, dat a dalších dokumentů. Každé PDF má na titulní straně datum verze. Oznámení, odevzdávání semestrálních prací a hodnocení zůstávají v Moodlu.
 
 ## Co tu je
 
