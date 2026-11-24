@@ -236,7 +236,7 @@ pom <- lm(update(formula(m), resid(m0) ~ .), data = sk)
 n * summary(pom)$r.squared
 
 # ---- lrtest ----
-lrtest(m0, m)   # LR test přímo z log-věrohodností obou modelů
+lrtest(m0, m)   # LR test přímo z logaritmických věrohodností obou modelů
 
 
 # ---- trojice-hladina ----

@@ -236,6 +236,25 @@ length(vyber_y)
 naivni_obce <- lm(obce$ucast ~ obce$referendum + X_tech[, vyber_y])
 coef(summary(naivni_obce))[2, 1:2]
 
+# ---- kvadrat-uvod ----
+# =============================================================================
+# Kvadratický člen: o kolik vzroste mzda mezi 10 a 11 lety praxe?
+# =============================================================================
+
+# ---- kvadrat-psid ----
+# PSID, stejný model jako v přednášce 6: log mzdy s praxí a jejím čtvercem
+w <- read.csv("data/Wages.csv")
+mw <- lm(lwage ~ exper + I(exper^2) + wks + ed + union + sex + black + married + smsa,
+         data = w)
+b1 <- coef(mw)[["exper"]]
+b2 <- coef(mw)[["I(exper^2)"]]
+# sklon (mezní efekt) b1 + 2 b2 exper v bodech 10, 10.5 a 11
+sklon <- b1 + 2 * b2 * c(10, 10.5, 11)
+# rozdíl dosazených hodnot pro 11 a 10 let praxe: stejný jako sklon v 10.5
+rozdil <- (b1 * 11 + b2 * 11^2) - (b1 * 10 + b2 * 10^2)
+c(sklon, rozdil = rozdil)
+100 * (exp(rozdil) - 1)  # přesně v procentech
+
 # ---- spline-uvod ----
 # =============================================================================
 # Spliny: polynomy po částech s omezeními v uzlech (podrobně v doplňku)
