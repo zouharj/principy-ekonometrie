@@ -31,9 +31,15 @@ gem$podnikani <- as.numeric(gem$podnikani != "zadne")
 gem$vzdelani   <- relevel(gem$vzdelani, "SS s mat.")
 gem$sebeduvera <- relevel(gem$sebeduvera, "Ne")
 gem$rok <- factor(gem$rok)
+
+# ---- rovnice ----
+# rovnice, kterou odhadujeme (LPM, logit i probit)
+rovnice <- podnikani ~ sebeduvera + pohlavi +
+  vzdelani + vek + I(vek^2) + rok
+
+# ---- gem-uplne ----
 # pro odhady používáme jen řádky bez chybějících hodnot
-f <- podnikani ~ sebeduvera + pohlavi + vzdelani + vek + I(vek^2) + rok
-gem <- gem[complete.cases(gem[, all.vars(f)]), ]
+gem <- gem[complete.cases(gem[, all.vars(rovnice)]), ]
 c(n = nrow(gem), podil_podnikajicich = mean(gem$podnikani))
 
 
@@ -42,7 +48,7 @@ c(n = nrow(gem), podil_podnikajicich = mean(gem$podnikani))
 # =============================================================================
 
 # ---- lpm ----
-lpm <- lm(f, data = gem)
+lpm <- lm(rovnice, data = gem)
 # heteroskedasticita je v LPM zaručená: var(y | x) = p(x)[1 - p(x)]
 coeftest(lpm, vcov = vcovHC(lpm, type = "HC1"))
 # predikované pravděpodobnosti mimo interval [0, 1]
@@ -69,12 +75,12 @@ mean(y)
 # =============================================================================
 
 # ---- logit ----
-logit <- glm(f, data = gem,
+logit <- glm(rovnice, data = gem,
              family = binomial(link = "logit"))
 round(coef(summary(logit)), 4)
 
 # ---- probit ----
-probit <- glm(f, data = gem, family = binomial(link = "probit"))
+probit <- glm(rovnice, data = gem, family = binomial(link = "probit"))
 # koeficienty logitu jsou zhruba 1.6 až 1.9krát větší než u probitu
 round(cbind(logit = coef(logit), probit = coef(probit),
             podil = coef(logit) / coef(probit)), 3)
@@ -97,7 +103,7 @@ round(exp(coef(logit)), 3)
 
 # ---- me-jedinec ----
 # efekt sebedůvěry pro dva lidi: muž 45 let s VŠ, žena 60 let se ZŠ
-osoby <- gem[c(1, 1), all.vars(f)]  # dva řádky dat, hodnoty přepíšeme
+osoby <- gem[c(1, 1), all.vars(rovnice)]  # dva řádky dat, hodnoty přepíšeme
 osoby$pohlavi[]  <- c("Muz", "Zena")
 osoby$vzdelani[] <- c("VS", "pouze ZS")
 osoby$vek <- c(45, 60)
@@ -135,15 +141,17 @@ lrtest(logit_bez_vzd, logit)
 hranice <- c(18, 30, 40, 50, 60, 70, 80, 90)
 nazvy <- c("18-29", "30-39", "40-49", "50-59",
            "60-69", "70-79", "80+")
-gem$vek10 <- cut(gem$vek, hranice,
+gem$vek_skupina <- cut(gem$vek, hranice,
                  right = FALSE, labels = nazvy)
-table(gem$vek10, gem$podnikani)
+table(gem$vek_skupina, gem$podnikani)
 
 # ---- sep-logit ----
-f10 <- podnikani ~ sebeduvera + pohlavi + vzdelani + vek10 + rok
-logit10 <- glm(f10, data = gem, family = binomial)
+rovnice_skupiny <- podnikani ~ sebeduvera + pohlavi +
+  vzdelani + vek_skupina + rok
+logit10 <- glm(rovnice_skupiny, data = gem,
+               family = binomial)
 # koeficienty u věkových intervalů (referenční 18-29)
-round(coef(summary(logit10))[grep("vek10", names(coef(logit10))), ], 3)
+round(coef(summary(logit10))[grep("vek_skupina", names(coef(logit10))), ], 3)
 
 # ---- sep-presnost ----
 # Přísnější kritérium zastavení algoritmu: odhad u 80+ se změní, ostatní ne
@@ -154,33 +162,33 @@ round(cbind(standardni = coef(logit10), prisnejsi = coef(logit10_p)), 3)
 # Odhad u 80+ a logaritmická věrohodnost po jednotlivých iteracích
 po_k_iteracich <- function(k) suppressWarnings(
   update(logit10, control = list(epsilon = 1e-30, maxit = k)))
-iter_b80  <- sapply(1:25, function(k) coef(po_k_iteracich(k))[["vek1080+"]])
+iter_b80  <- sapply(1:25, function(k) coef(po_k_iteracich(k))[["vek_skupina80+"]])
 iter_logL <- sapply(1:25, function(k) as.numeric(logLik(po_k_iteracich(k))))
 round(cbind(iterace = 1:25, b80 = iter_b80, logL = iter_logL), 3)
 
 # ---- sep-testy ----
 # Waldův test u 80+ nic neříká; LR test porovná model s intervalem 80+
 # a model, kde je 80+ sloučeno s referenční kategorií 18-29
-gem$vek10_bez80 <- gem$vek10
-levels(gem$vek10_bez80)[levels(gem$vek10_bez80) == "80+"] <- "18-29"
-logit10_h0 <- glm(podnikani ~ sebeduvera + pohlavi + vzdelani + vek10_bez80 + rok,
-                  data = gem, family = binomial)
+gem$vek_skupina_bez80 <- gem$vek_skupina
+levels(gem$vek_skupina_bez80)[levels(gem$vek_skupina_bez80) == "80+"] <- "18-29"
+logit10_h0 <- glm(podnikani ~ sebeduvera + pohlavi + vzdelani +
+                    vek_skupina_bez80 + rok, data = gem, family = binomial)
 lrtest(logit10_h0, logit10)
 
 # ---- sep-reseni ----
 # Tři řešení: (1) sloučit intervaly 70-79 a 80+, (2) vyřadit 80+ (to dělá
 # např. Stata), (3) Firthova korekce (penalizovaná věrohodnost)
-gem$vek10_70 <- gem$vek10
-levels(gem$vek10_70)[levels(gem$vek10_70) %in% c("70-79", "80+")] <- "70+"
-r_sloucit <- glm(podnikani ~ sebeduvera + pohlavi + vzdelani + vek10_70 + rok,
-                 data = gem, family = binomial)
-r_vyradit <- glm(f10, data = droplevels(subset(gem, vek10 != "80+")),
+gem$vek_skupina_70 <- gem$vek_skupina
+levels(gem$vek_skupina_70)[levels(gem$vek_skupina_70) %in% c("70-79", "80+")] <- "70+"
+r_sloucit <- glm(podnikani ~ sebeduvera + pohlavi + vzdelani +
+                   vek_skupina_70 + rok, data = gem, family = binomial)
+r_vyradit <- glm(rovnice_skupiny, data = droplevels(subset(gem, vek_skupina != "80+")),
                  family = binomial)
-r_firth   <- glm(f10, data = gem, family = binomial, method = "brglmFit")
+r_firth   <- glm(rovnice_skupiny, data = gem, family = binomial, method = "brglmFit")
 koef <- c("sebeduveraAno", "pohlaviZena")
 round(rbind(sloucit = coef(r_sloucit)[koef], vyradit = coef(r_vyradit)[koef],
             firth = coef(r_firth)[koef], puvodni = coef(logit10)[koef]), 3)
-round(coef(r_firth)["vek1080+"], 3)
+round(coef(r_firth)["vek_skupina80+"], 3)
 
 
 # =============================================================================
@@ -200,8 +208,9 @@ X <- model.matrix(logit)
 yv <- logit$y
 minus_logL <- function(b, X) {
   eta <- X %*% b
-  # plogis(eta, log.p = TRUE) = log(p) spočtený přesně i pro velká |eta|
-  -sum(yv * plogis(eta, log.p = TRUE) + (1 - yv) * plogis(-eta, log.p = TRUE))
+  # log(p) spočtený přesně i pro velká |eta|
+  -sum(yv * plogis(eta, log.p = TRUE) +
+         (1 - yv) * plogis(-eta, log.p = TRUE))
 }
 
 # ---- optim-skalovani ----
